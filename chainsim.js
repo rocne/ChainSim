@@ -28,8 +28,7 @@ function createButtonInput(name, clickedFunction) {
 	input.innerHTML = name;
 	inputs[name] = input;
 
-	document.body.appendChild(input);
-	document.body.appendChild(document.createElement("BR"));
+	return input;
 }
 
 function createRangeInput(name, min, max, defaultValue, changeFunction) {	
@@ -54,8 +53,7 @@ function createRangeInput(name, min, max, defaultValue, changeFunction) {
 	
 	label.appendChild(input);
 	label.appendChild(readOut);
-	document.body.appendChild(label);
-	document.body.appendChild(document.createElement("BR"));
+	return label;
 }
 
 function updateGrav() {
@@ -68,20 +66,29 @@ function updateGrav() {
 }
 
 function setWidthAndHeight(w, h) {
-	HEIGHT = window.innerHeight;
-	WIDTH = window.innerWidth;
+	var inputHeight = document.getElementById("inputs").clientHeight;
+
+	HEIGHT = (window.innerHeight - inputHeight) * 0.9;
+	WIDTH = window.innerWidth * 0.9;
 
 	if (WIDTH == 0 || HEIGHT == 0)
 		WIDTH = HEIGHT = 720;
 }
 
 function createInputs() {
-	createRangeInput("grav", 0, 0.25, GRAV, updateGrav);
+	var inputDiv = document.createElement("DIV");
+	inputDiv.id = "inputs";
+	
+	var gravInput = createRangeInput("grav", 0, 0.25, GRAV, updateGrav);
+	inputDiv.appendChild(gravInput);
+	inputDiv.appendChild(document.createElement("BR"));
+
+	document.body.appendChild(inputDiv);
 }
 
 function setup() {
-	setWidthAndHeight();
 	createInputs();
+	setWidthAndHeight();
 
 	createCanvas(WIDTH, HEIGHT);
 	
