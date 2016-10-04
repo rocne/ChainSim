@@ -19,10 +19,6 @@ var inputs = {};
 var stopped = false;
 
 window.onload = function() {
-	HEIGHT = window.innerHeight * 0.95;
-	WIDTH = window.innerWidth * 0.95;
-	
-	createRangeInput("grav", 0, 0.25, GRAV, updateGrav);
 }
 
 function createButtonInput(name, clickedFunction) {
@@ -71,9 +67,21 @@ function updateGrav() {
 
 }
 
+function setWidthAndHeight(w, h) {
+	HEIGHT = window.innerHeight;
+	WIDTH = window.innerWidth;
+
+	if (WIDTH == 0 || HEIGHT == 0)
+		WIDTH = HEIGHT = 720;
+}
+
+function createInputs() {
+	createRangeInput("grav", 0, 0.25, GRAV, updateGrav);
+}
+
 function setup() {
-	while (WIDTH == 0 || HEIGHT == 0)
-		;
+	setWidthAndHeight();
+	createInputs();
 
 	createCanvas(WIDTH, HEIGHT);
 	

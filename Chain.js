@@ -16,10 +16,10 @@ function Chain(len) {
 	}	
 	
 	this.show = function() {
-//		for (var i = 0; i < this.links.length; i++) {
-//			var link = this.links[i];
-//			link.show();
-//		}
+		for (var i = 0; i < this.links.length; i++) {
+			var link = this.links[i];
+			link.show();
+		}
 		console.log("show chain");
 	}
 
