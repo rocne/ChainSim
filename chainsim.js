@@ -2,8 +2,6 @@
 var WIDTH = 0;//2500;
 var HEIGHT = 0;//1400;
 
-var INITIAL_NUM_THINGS = 250;
-
 // debugging vars
 var lastFrameTime = 0;
 var shouldLogFrameRate = false;
@@ -12,7 +10,7 @@ var fooCount = 0;
 // sim variables
 var chain;
 
-var LEN = 10;
+var LEN = 25;
 
 var inputs = {};
 
@@ -31,13 +29,13 @@ function createButtonInput(name, clickedFunction) {
 	return input;
 }
 
-function createRangeInput(name, min, max, defaultValue, changeFunction) {	
+function createRangeInput(name, min, max, defaultValue, step, changeFunction) {	
 	var input = document.createElement("INPUT");
 	input.setAttribute("name", name);
 	input.setAttribute("type", "range");
 	input.setAttribute("min", min);
 	input.setAttribute("max", max);
-	input.setAttribute("step", 0.005);
+	input.setAttribute("step", step);
 	input.setAttribute("defaultValue", defaultValue);
 	input.value = defaultValue;
 	input.onchange = changeFunction;
@@ -57,12 +55,21 @@ function createRangeInput(name, min, max, defaultValue, changeFunction) {
 }
 
 function updateGrav() {
-	console.log(inputs);
 	var value = inputs["grav"].value;
 	GRAV = value;	
 	inputs["grav"].readOut.innerHTML = value;
-	console.log("updated grav to " + value);
+}
 
+function updateLen() {
+	console.log("ffff");
+	var value = inputs["len"].value;
+	LEN = value;	
+	inputs["len"].readOut.innerHTML = value;
+	while (chain.length() > LEN)
+		chain.removeLink();
+
+	while (chain.length() < LEN)
+		chain.addLink();
 }
 
 function setWidthAndHeight(w, h) {
@@ -78,15 +85,21 @@ function setWidthAndHeight(w, h) {
 function createInputs() {
 	var inputDiv = document.createElement("DIV");
 	inputDiv.id = "inputs";
-	
-	var gravInput = createRangeInput("grav", 0, 0.25, GRAV, updateGrav);
+
+	var gravInput = createRangeInput("grav", 0, 0.75, GRAV, 0.005, updateGrav);
+	var lenInput = createRangeInput("len", 1, 200, LEN, 1, updateLen);
+
 	inputDiv.appendChild(gravInput);
+	inputDiv.appendChild(document.createElement("BR"));
+
+	inputDiv.appendChild(lenInput);
 	inputDiv.appendChild(document.createElement("BR"));
 
 	document.body.appendChild(inputDiv);
 }
 
 function setup() {
+	frameRate(30);
 	createInputs();
 	setWidthAndHeight();
 
